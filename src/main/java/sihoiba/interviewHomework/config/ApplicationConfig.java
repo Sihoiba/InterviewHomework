@@ -29,10 +29,4 @@ public class ApplicationConfig {
         return restTemplateBuilder.build();
     }
 
-    @Bean
-    @ConfigurationProperties( "interview-homework.datasource" )
-    public DataSource dataSource( Environment env ) {
-        return DataSourceBuilder.create().type( HikariDataSource.class ).build();
-    }
-
 }

@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * The stored details of a video
+ */
 public final class VideoDetails {
 
     private Long id;
