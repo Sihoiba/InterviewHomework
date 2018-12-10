@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import sihoiba.interviewHomework.model.VideoDetails;
+import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.service.YoutubeVideoDetailsService;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 
 
 @RunWith( MockitoJUnitRunner.class )
-public class VideoDetailsControllerTest {
+public class VideosControllerTest {
 
     @Mock
     YoutubeVideoDetailsService mockYoutubeVideoDetailService;
@@ -46,18 +46,18 @@ public class VideoDetailsControllerTest {
     @Test
     public void shouldGetAllResults() {
         // Given
-        List<VideoDetails> expectedVideoDetailsList = new ArrayList<>();
-        VideoDetails videoDetails1 = givenAVideoDetails( 11L );
-        VideoDetails videoDetails2 = givenAVideoDetails( 12L );
-        expectedVideoDetailsList.add( videoDetails1 );
-        expectedVideoDetailsList.add( videoDetails2 );
-        given( mockYoutubeVideoDetailService.getAllStoredVideoDetails() ).willReturn( expectedVideoDetailsList );
+        List<Video> expectedVideoList = new ArrayList<>();
+        Video video1 = givenAVideoDetails( 11L );
+        Video video2 = givenAVideoDetails( 12L );
+        expectedVideoList.add( video1 );
+        expectedVideoList.add( video2 );
+        given( mockYoutubeVideoDetailService.getAllStoredVideoDetails() ).willReturn( expectedVideoList );
 
         //When
-        List<VideoDetails> result = classUnderTest.getAllVideoDetails();
+        List<Video> result = classUnderTest.getAllVideoDetails();
 
         //Then
-        assertThat( result ).isEqualTo( expectedVideoDetailsList );
+        assertThat( result ).isEqualTo( expectedVideoList );
         then( mockYoutubeVideoDetailService ).should().getAllStoredVideoDetails();
     }
 
@@ -65,14 +65,14 @@ public class VideoDetailsControllerTest {
     public void shouldGetVideoDetails() {
         // Given
         Long id = 10L;
-        VideoDetails expectedVideoDetails = givenAVideoDetails( id );
-        given( mockYoutubeVideoDetailService.getVideoDetails( anyLong() ) ).willReturn( expectedVideoDetails );
+        Video expectedVideo = givenAVideoDetails( id );
+        given( mockYoutubeVideoDetailService.getVideoDetails( anyLong() ) ).willReturn( expectedVideo );
 
         //When
-        VideoDetails result = classUnderTest.getVideoDetailsById( id );
+        Video result = classUnderTest.getVideoDetailsById( id );
 
         //Then
-        assertThat( result ).isEqualTo( expectedVideoDetails );
+        assertThat( result ).isEqualTo( expectedVideo );
         then( mockYoutubeVideoDetailService ).should().getVideoDetails( id );
     }
 
@@ -134,7 +134,7 @@ public class VideoDetailsControllerTest {
 
     }
 
-    private VideoDetails givenAVideoDetails( Long id ) {
-        return new VideoDetails( id, "test", LocalDateTime.now() );
+    private Video givenAVideoDetails( Long id ) {
+        return new Video( id, "test", LocalDateTime.now() );
     }
 }

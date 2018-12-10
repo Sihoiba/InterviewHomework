@@ -1,6 +1,6 @@
 package sihoiba.interviewHomework.service;
 
-import sihoiba.interviewHomework.model.VideoDetails;
+import sihoiba.interviewHomework.model.Video;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ public class YoutubeVideoDetailsService {
     public void populateVideoDetails() {
     }
 
-    public List<VideoDetails> getAllStoredVideoDetails() {
+    public List<Video> getAllStoredVideoDetails() {
         return null;
     }
 
-    public VideoDetails getVideoDetails( Long id ) {
+    public Video getVideoDetails( Long id ) {
         return null;
     }
 

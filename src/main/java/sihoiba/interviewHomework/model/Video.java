@@ -1,7 +1,6 @@
 package sihoiba.interviewHomework.model;
 
 import com.google.common.base.MoreObjects;
-import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,16 +9,13 @@ import java.util.Objects;
 /**
  * The stored details of a video
  */
-public final class VideoDetails {
+public final class Video {
 
     private Long id;
     private String title;
     private LocalDateTime publishedAt;
 
-    public VideoDetails( Long id, String title, LocalDateTime publishedAt ) {
-        Assert.notNull( id, "id must not be null" );
-        Assert.notNull( title, "id must not be null" );
-        Assert.notNull( publishedAt, "id must not be null" );
+    public Video( Long id, String title, LocalDateTime publishedAt ) {
         this.id = id;
         this.title = title;
         this.publishedAt = publishedAt;
@@ -42,10 +38,10 @@ public final class VideoDetails {
         if ( this == o ) {
             return true;
         }
-        if ( !( o instanceof VideoDetails ) ) {
+        if ( !( o instanceof Video ) ) {
             return false;
         }
-        VideoDetails that = (VideoDetails) o;
+        Video that = (Video) o;
         return Objects.equals( id, that.id ) &&
                 Objects.equals( title, that.title ) &&
                 Objects.equals( publishedAt, that.publishedAt );
