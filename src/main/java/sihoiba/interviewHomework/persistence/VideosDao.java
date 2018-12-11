@@ -61,11 +61,12 @@ public class VideosDao {
         Assert.notNull( id, "id must not be null" );
         String selectQuery = "SELECT id, title, date FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
-        Video video = jdbcTemplate.query( selectQuery, selectParams, Video.class );
-        if ( video == null ) {
+        List<Video> video = jdbcTemplate.query( selectQuery, selectParams, new VideosRowMapper() );
+        if ( video.isEmpty() ) {
             LOG.info( "No video found for id {}", id );
+            return null;
         }
-        return video;
+        return video.get( 0 );
     }
 
     /**
@@ -75,7 +76,7 @@ public class VideosDao {
     public List<Video> getAllVideos() {
         String selectQuery = "SELECT id, title, date FROM mydb.videos ORDER by id ASC";
         Object[] selectParams = new Object[] {};
-        List<Video> records = jdbcTemplate.query( selectQuery, selectParams, Video.class );
+        List<Video> records = jdbcTemplate.query( selectQuery, selectParams, new VideosRowMapper() );
 
         if ( records.isEmpty() ) {
             LOG.info( "No videos found" );
@@ -89,7 +90,8 @@ public class VideosDao {
      */
     public void delete( Long id ) {
         Assert.notNull( id, "id must not be null" );
-        String selectQuery = "DELETE FROM mydb.videos WHERE id = ?";
-        Object[] selectParams = new Object[] { id };
+        String query = "DELETE FROM mydb.videos WHERE id = ?";
+        Object[] params = new Object[] { id };
+        jdbcTemplate.update( query, params );
     }
 }

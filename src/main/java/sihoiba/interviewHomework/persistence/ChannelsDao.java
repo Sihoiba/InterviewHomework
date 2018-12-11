@@ -58,7 +58,7 @@ public class ChannelsDao {
     public List<Channel> getAllChannels() {
         String selectQuery = "SELECT id, channel FROM channels";
         Object[] selectParams = new Object[] {};
-        List<Channel> records = jdbcTemplate.queryForList( selectQuery, selectParams, Channel.class );
+        List<Channel> records = jdbcTemplate.query( selectQuery, selectParams, new ChannelsRowMapper() );
 
         if ( records.isEmpty() ) {
             LOG.info( "No channels found" );

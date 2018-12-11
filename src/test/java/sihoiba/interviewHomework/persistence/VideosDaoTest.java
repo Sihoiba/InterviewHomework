@@ -179,7 +179,14 @@ public class VideosDaoTest {
     private Video getVideo( Long id ) {
         String query = "SELECT id, title, date FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
-        return jdbcTemplate.queryForObject( query, selectParams, Video.class );
+        List<Video> video = jdbcTemplate.query( query, selectParams, new VideosRowMapper() );
+        if ( video.size() == 1 ) {
+            return video.get( 0 );
+        } else if ( video.size() > 1 ) {
+            throw new IllegalStateException( "id must be unique" );
+        } else {
+            return null;
+        }
     }
 
     private void createVideo( Long id, String title, LocalDateTime datetime ) {
