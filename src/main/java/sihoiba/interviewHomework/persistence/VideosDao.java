@@ -31,7 +31,7 @@ public class VideosDao {
     public void create( Video video ) {
         Assert.notNull( video, "video must not be null" );
 
-        String query = "INSERT INTO videos (id, title, date) values (?, ?, ?)";
+        String query = "INSERT INTO mydb.videos (id, title, date) values (?, ?, ?)";
 
         Object[] params = new Object[] {
                 video.getId(),
@@ -59,9 +59,9 @@ public class VideosDao {
      */
     public Video get( Long id ) {
         Assert.notNull( id, "id must not be null" );
-        String selectQuery = "SELECT id, title, date FROM videos WHERE id = ?";
+        String selectQuery = "SELECT id, title, date FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
-        Video video = jdbcTemplate.queryForObject( selectQuery, selectParams, Video.class );
+        Video video = jdbcTemplate.query( selectQuery, selectParams, Video.class );
         if ( video == null ) {
             LOG.info( "No video found for id {}", id );
         }
@@ -73,9 +73,9 @@ public class VideosDao {
      * @return the stored videos
      */
     public List<Video> getAllVideos() {
-        String selectQuery = "SELECT id, title, date FROM videos ORDER by id ASC";
+        String selectQuery = "SELECT id, title, date FROM mydb.videos ORDER by id ASC";
         Object[] selectParams = new Object[] {};
-        List<Video> records = jdbcTemplate.queryForList( selectQuery, selectParams, Video.class );
+        List<Video> records = jdbcTemplate.query( selectQuery, selectParams, Video.class );
 
         if ( records.isEmpty() ) {
             LOG.info( "No videos found" );
@@ -89,7 +89,7 @@ public class VideosDao {
      */
     public void delete( Long id ) {
         Assert.notNull( id, "id must not be null" );
-        String selectQuery = "DELETE FROM videos WHERE id = ?";
+        String selectQuery = "DELETE FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
     }
 }

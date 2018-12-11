@@ -22,8 +22,7 @@ public class DaoTestConfiguration {
         dataSource.setPassword("sa");
 
         Resource initSchema = new ClassPathResource("youtube.sql");
-        Resource initData = new ClassPathResource("data.sql");
-        DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema, initData);
+        DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema);
         DatabasePopulatorUtils.execute(databasePopulator, dataSource);
 
         return dataSource;

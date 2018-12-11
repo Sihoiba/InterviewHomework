@@ -1,6 +1,7 @@
 package sihoiba.interviewHomework.persistence;
 
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.shouldHaveThrown;
  */
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( classes = DaoTestConfiguration.class )
+@DirtiesContext( classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD )
 public class VideosDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger( VideosDaoTest.class );
@@ -32,6 +34,12 @@ public class VideosDaoTest {
 
     @Autowired
     VideosDao videosDao;
+
+    @After
+    public void tearDown() {
+        String query = "TRUNCATE TABLE mydb.videos";
+        jdbcTemplate.update( query );
+    }
 
     @Test
     public void shouldCreateVideo() {
@@ -169,17 +177,13 @@ public class VideosDaoTest {
     }
 
     private Video getVideo( Long id ) {
-        String query = "SELECT * FROM videos WHERE id = ?";
+        String query = "SELECT id, title, date FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
         return jdbcTemplate.queryForObject( query, selectParams, Video.class );
     }
 
     private void createVideo( Long id, String title, LocalDateTime datetime ) {
-        String select = "SHOW TABLES";
-        Object[] selectParams = new Object[] {};
-        List<String> result = jdbcTemplate.queryForList( select, selectParams, String.class );
-        LOG.info( "{}", result );
-        String query = "INSERT INTO videos(id, title, date) values (?, ?, ?)";
+        String query = "INSERT INTO mydb.videos(id, title, date) values (?, ?, ?)";
         Object[] params = new Object[] {
           id,
           title,
