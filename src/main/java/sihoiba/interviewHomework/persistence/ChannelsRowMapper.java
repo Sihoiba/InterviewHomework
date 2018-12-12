@@ -7,6 +7,9 @@ import org.springframework.jdbc.core.RowMapper;
 
 import sihoiba.interviewHomework.model.Channel;
 
+/**
+ * RowMapper for {@link Channel}
+ */
 public class ChannelsRowMapper implements RowMapper<Channel> {
 
 	@Override

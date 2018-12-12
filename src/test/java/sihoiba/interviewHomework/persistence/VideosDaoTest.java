@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
 /**
- * Test for {@link sihoiba.interviewHomework.model.Video}
+ * Test for {@link sihoiba.interviewHomework.persistence.VideosDao}
  */
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( classes = DaoTestConfiguration.class )
@@ -179,10 +179,10 @@ public class VideosDaoTest {
     private Video getVideo( Long id ) {
         String query = "SELECT id, title, date FROM mydb.videos WHERE id = ?";
         Object[] selectParams = new Object[] { id };
-        List<Video> video = jdbcTemplate.query( query, selectParams, new VideosRowMapper() );
-        if ( video.size() == 1 ) {
-            return video.get( 0 );
-        } else if ( video.size() > 1 ) {
+        List<Video> videos = jdbcTemplate.query( query, selectParams, new VideosRowMapper() );
+        if ( videos.size() == 1 ) {
+            return videos.get( 0 );
+        } else if ( videos.size() > 1 ) {
             throw new IllegalStateException( "id must be unique" );
         } else {
             return null;

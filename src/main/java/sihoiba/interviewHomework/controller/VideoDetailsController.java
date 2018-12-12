@@ -4,6 +4,9 @@ import sihoiba.interviewHomework.model.Video;
 
 import java.util.List;
 
+/**
+ * Controller that provides all methods for storing video data from Youtube, retrieving and searching it.
+ */
 public class VideoDetailsController {
 
     public void populateVideoDetails() {

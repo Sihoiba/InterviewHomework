@@ -30,9 +30,8 @@ public class ChannelsDao {
      */
     public void create( Channel channel ) {
         Assert.notNull( channel, "channel must not be null" );
-        Assert.notNull( channel.getChannelName(), "channel.channelName must not be null " );
 
-        String query = "INSERT INTO channels (id, channel_name) values (?, ?)";
+        String query = "INSERT INTO mydb.channels (id, channel_name) values (?, ?)";
 
         Object[] params = new Object[] {
                 channel.getId(),
@@ -56,7 +55,7 @@ public class ChannelsDao {
      * @return the stored channels
      */
     public List<Channel> getAllChannels() {
-        String selectQuery = "SELECT id, channel FROM channels";
+        String selectQuery = "SELECT id, channel_name FROM mydb.channels";
         Object[] selectParams = new Object[] {};
         List<Channel> records = jdbcTemplate.query( selectQuery, selectParams, new ChannelsRowMapper() );
 

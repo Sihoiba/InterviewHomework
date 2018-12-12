@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 
 import sihoiba.interviewHomework.model.Video;
 
+/**
+ * RowMapper for {@link Video}
+ */
 public class VideosRowMapper implements RowMapper<Video> {
 
 	@Override
