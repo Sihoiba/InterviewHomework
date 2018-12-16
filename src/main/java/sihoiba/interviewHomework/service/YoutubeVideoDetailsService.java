@@ -7,12 +7,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sihoiba.interviewHomework.persistence.VideosDao;
 
 @Component
 public class YoutubeVideoDetailsService {
 
     @Autowired
     private YoutubeClient youtubeClient;
+
+    @Autowired
+    private VideosDao videosDao;
 
     public void populateVideoDetails() {
     }
