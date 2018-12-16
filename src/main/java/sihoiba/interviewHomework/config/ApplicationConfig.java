@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
  * Application configuration for the interview homework application
  */
 @Configuration
-@ComponentScan( basePackages = { "sihoiba.interviewHomework.controller", "sihoiba.interviewHomework.service" } )
+@ComponentScan( basePackages = { "sihoiba.interviewHomework.service" } )
 public class ApplicationConfig {
 
     @Bean

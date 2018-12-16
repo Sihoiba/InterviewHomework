@@ -27,4 +27,8 @@ public class YoutubeVideoDetailsService {
 
     public void deleteVideoDetails( Long id ) {
     }
+
+    public List<Video> searchVideos( String searchTerm ) {
+        return null;
+    }
 }

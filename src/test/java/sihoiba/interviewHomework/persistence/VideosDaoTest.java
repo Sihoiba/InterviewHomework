@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sihoiba.interviewHomework.model.Video;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,7 +80,7 @@ public class VideosDaoTest {
         // Given
         Long id = 1L;
         String title = "someTitle";
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().withNano( 0 );
         createVideo( id, title, now );
 
         // When
@@ -124,12 +125,12 @@ public class VideosDaoTest {
         // Given
         Long id1 = 1L;
         String title1 = "someTitle";
-        LocalDateTime now1 = LocalDateTime.now();
+        LocalDateTime now1 = LocalDateTime.now().withNano( 0 );
         createVideo( id1, title1, now1 );
 
         Long id2 = 2L;
         String title2 = "someTitle";
-        LocalDateTime now2 = LocalDateTime.now();
+        LocalDateTime now2 = LocalDateTime.now().withNano( 0 );
         createVideo( id2, title2, now2 );
 
         // When

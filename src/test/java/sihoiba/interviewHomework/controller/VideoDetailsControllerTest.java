@@ -18,11 +18,12 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 
 @RunWith( MockitoJUnitRunner.class )
-public class VideosControllerTest {
+public class VideoDetailsControllerTest {
 
     @Mock
     YoutubeVideoDetailsService mockYoutubeVideoDetailService;
@@ -84,10 +85,10 @@ public class VideosControllerTest {
         // When
         try {
             classUnderTest.getVideoDetailsById( id );
-            shouldHaveThrown( NullPointerException.class );
+            shouldHaveThrown( IllegalArgumentException.class );
             // Then
-        } catch( NullPointerException expected ) {
-            assertThat( expected ).hasMessage( "id must not be null" );
+        } catch( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "id must not be null." );
             verifyZeroInteractions( mockYoutubeVideoDetailService );
         }
 
@@ -115,10 +116,10 @@ public class VideosControllerTest {
         // When
         try {
             classUnderTest.deleteVideoDetails( id );
-            shouldHaveThrown( NullPointerException.class );
+            shouldHaveThrown( IllegalArgumentException.class );
             //Then
-        } catch( NullPointerException expected ) {
-            assertThat( expected ).hasMessage( "id must not be null" );
+        } catch( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "id must not be null." );
             verifyZeroInteractions( mockYoutubeVideoDetailService );
         }
     }
@@ -126,12 +127,34 @@ public class VideosControllerTest {
     @Test
     public void shouldFindMatchingGivenSearchTerm() {
         //Given
+        String searchTerm = "term";
+        List<Video> videosReturned = new ArrayList<>();
+        given( mockYoutubeVideoDetailService.searchVideos( searchTerm ) ).willReturn( videosReturned );
+
+        //When
+        List<Video> results = classUnderTest.searchVideoDetails( searchTerm );
+
+        //Then
+        assertThat( results ).containsExactlyElementsOf( videosReturned );
+        then( mockYoutubeVideoDetailService ).should().searchVideos( searchTerm );
+        verifyNoMoreInteractions( mockYoutubeVideoDetailService );
 
     }
 
     @Test
     public void shouldNotFindMatchingGivenNullSearchTerm() {
+        // Given
+        String searchTerm = null;
 
+        // When
+        try {
+            classUnderTest.searchVideoDetails( searchTerm );
+            shouldHaveThrown( IllegalArgumentException.class );
+            //Then
+        } catch( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "searchTerm must not be null." );
+            verifyZeroInteractions( mockYoutubeVideoDetailService );
+        }
     }
 
     private Video givenAVideoDetails( Long id ) {

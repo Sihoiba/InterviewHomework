@@ -1,40 +1,63 @@
 package sihoiba.interviewHomework.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.service.YoutubeVideoDetailsService;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Controller that provides all methods for storing video data from Youtube, retrieving and searching it.
  */
-@Controller
+@RestController
 public class VideoDetailsController {
+
+    private static final Logger LOG = LoggerFactory.getLogger( VideoDetailsController.class );
 
     @Autowired
     private YoutubeVideoDetailsService youtubeVideoDetailsService;
 
-    @PostMapping
+    @PostMapping( path="/video/populate" )
     public void populateVideoDetails() {
+        LOG.info( "Populating stored video details" );
+
+        youtubeVideoDetailsService.populateVideoDetails();
     }
 
-    @GetMapping
+    @GetMapping( path="/video/getAll" )
     public List<Video> getAllVideoDetails() {
-        return null;
+        LOG.info( "Getting all stored video details." );
+        return youtubeVideoDetailsService.getAllStoredVideoDetails();
     }
 
-    @GetMapping
-    public Video getVideoDetailsById( Long id ) {
-        return null;
+    @GetMapping( path="/video/{id}" )
+    public Video getVideoDetailsById( @PathVariable Long id ) {
+        Assert.notNull( id, "id must not be null." );
+        LOG.info( "Getting stored video details with {}", id );
+        return youtubeVideoDetailsService.getVideoDetails( id );
     }
 
-    @DeleteMapping
-    public void deleteVideoDetails( Long id ) {
+    @DeleteMapping( path="/video/{id}" )
+    public void deleteVideoDetails( @PathVariable Long id ) {
+        Assert.notNull( id, "id must not be null." );
+        LOG.info( "Deleting stored video details with {}", id );
+        youtubeVideoDetailsService.deleteVideoDetails( id );
+    }
+
+    @GetMapping( path="/video/search" )
+    public List<Video> searchVideoDetails( @NotNull @RequestBody String searchTerm ) {
+        Assert.notNull( searchTerm, "searchTerm must not be null." );
+        LOG.info( "Searching by {}", searchTerm );
+        return youtubeVideoDetailsService.searchVideos( searchTerm );
     }
 }
