@@ -21,7 +21,9 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
-
+/**
+ * Unit test for {@link VideoDetailsController}
+ */
 @RunWith( MockitoJUnitRunner.class )
 public class VideoDetailsControllerTest {
 

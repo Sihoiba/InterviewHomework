@@ -1,21 +1,21 @@
 package sihoiba.interviewHomework.service;
 
 import com.google.api.client.util.DateTime;
-import com.google.api.services.youtube.model.VideoSnippet;
+import com.google.api.services.youtube.model.SearchResultSnippet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import sihoiba.interviewHomework.client.YoutubeClient;
+import sihoiba.interviewHomework.client.YouTubeClient;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.persistence.VideosDao;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,14 +33,13 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 @RunWith( MockitoJUnitRunner.class )
 public class YoutubeVideoDetailsServiceTest {
 
-	private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
-	private static final String TITLE = "Test video title";
+	private static final LocalDateTime CURRENT_TIME = LocalDateTime.now().withNano( 0 );
 
 	@Mock
 	VideosDao mockVideosDao;
 
 	@Mock
-	YoutubeClient mockYoutubeClient;
+	YouTubeClient mockYouTubeClient;
 
 	@InjectMocks
 	YoutubeVideoDetailsService classUnderTest;
@@ -48,33 +47,33 @@ public class YoutubeVideoDetailsServiceTest {
 	@Test
 	public void shouldPopulateVideoDetails() {
 		// Given
-		com.google.api.services.youtube.model.Video returnedVideo1 = getYoutubeVideo( "test title 1" );
-		com.google.api.services.youtube.model.Video returnedVideo2 = getYoutubeVideo( "test title 2" );
-		List<com.google.api.services.youtube.model.Video> returnedVideos = new ArrayList<>();
-		returnedVideos.add( returnedVideo1 );
-		returnedVideos.add( returnedVideo2 );
-		given( mockYoutubeClient.getVideoDetails() ).willReturn( returnedVideos );
+		SearchResultSnippet returnVideoSnippet1 = getSearchResultSnippet( "test title 1" );
+		SearchResultSnippet returnVideoSnippet2 = getSearchResultSnippet( "test title 2" );
+		List<SearchResultSnippet> returnedVideos = new ArrayList<>();
+		returnedVideos.add( returnVideoSnippet1 );
+		returnedVideos.add( returnVideoSnippet2 );
+		given( mockYouTubeClient.getVideoDetails() ).willReturn( returnedVideos );
 		willDoNothing().given( mockVideosDao ).create( isA(  Video.class ) );
 
 		// When
 		classUnderTest.populateVideoDetails();
 
 		// Then
-		then( mockYoutubeClient ).should().getVideoDetails();
+		then( mockYouTubeClient ).should().getVideoDetails();
 		ArgumentCaptor<Video> videoArgumentCaptor =
 				ArgumentCaptor.forClass( Video.class );
 		then( mockVideosDao ).should( times( 2 ) ).create( videoArgumentCaptor.capture() );
 		Video actualParam1 = videoArgumentCaptor.getAllValues().get( 0 );
-		Video actualParam2 = videoArgumentCaptor.getAllValues().get( 0 );
+		Video actualParam2 = videoArgumentCaptor.getAllValues().get( 1 );
 		assertThat( actualParam1 )
-				.hasNoNullFieldsOrProperties()
+				.hasFieldOrPropertyWithValue( "id", null )
 				.hasFieldOrPropertyWithValue( "title", "test title 1" )
 				.hasFieldOrPropertyWithValue( "publishedAt", CURRENT_TIME );
 		assertThat( actualParam2 )
-				.hasNoNullFieldsOrProperties()
+				.hasFieldOrPropertyWithValue( "id", null )
 				.hasFieldOrPropertyWithValue( "title", "test title 2" )
 				.hasFieldOrPropertyWithValue( "publishedAt", CURRENT_TIME );
-		verifyNoMoreInteractions( mockVideosDao, mockYoutubeClient );
+		verifyNoMoreInteractions( mockVideosDao, mockYouTubeClient );
 	}
 
 	@Test
@@ -94,7 +93,7 @@ public class YoutubeVideoDetailsServiceTest {
 		assertThat( result ).containsExactlyElementsOf( storedVideos );
 		then( mockVideosDao ).should().getAllVideos();
 		verifyNoMoreInteractions( mockVideosDao );
-		verifyZeroInteractions( mockYoutubeClient );
+		verifyZeroInteractions( mockYouTubeClient );
 	}
 
 	@Test
@@ -110,7 +109,7 @@ public class YoutubeVideoDetailsServiceTest {
 		assertThat( result ).isEqualTo( video );
 		then( mockVideosDao ).should().get( 1L );
 		verifyNoMoreInteractions( mockVideosDao );
-		verifyZeroInteractions( mockYoutubeClient );
+		verifyZeroInteractions( mockYouTubeClient );
 	}
 
 	@Test
@@ -124,17 +123,16 @@ public class YoutubeVideoDetailsServiceTest {
 		// Then
 		then( mockVideosDao ).should().delete( 1L );
 		verifyNoMoreInteractions( mockVideosDao );
-		verifyZeroInteractions( mockYoutubeClient );
+		verifyZeroInteractions( mockYouTubeClient );
 
 	}
 
-	private com.google.api.services.youtube.model.Video getYoutubeVideo( String title ) {
-		com.google.api.services.youtube.model.Video returnedVideo = new com.google.api.services.youtube.model.Video();
-		VideoSnippet videoSnippet = new VideoSnippet();
-		videoSnippet.setPublishedAt( new DateTime( CURRENT_TIME.toEpochSecond( ZoneOffset.UTC ) ) );
-		videoSnippet.setTitle( title );
-		returnedVideo.setSnippet( videoSnippet );
-		return returnedVideo;
+	private SearchResultSnippet getSearchResultSnippet( String title ) {
+		SearchResultSnippet searchResultSnippet = new SearchResultSnippet();
+		Date date = Date.from(CURRENT_TIME.atZone(ZoneId.systemDefault()).toInstant());
+		searchResultSnippet.setPublishedAt( new DateTime( date ) );
+		searchResultSnippet.setTitle( title );
+		return searchResultSnippet;
 	}
 
 	private Video getInternalVideo( long id, String title ) {

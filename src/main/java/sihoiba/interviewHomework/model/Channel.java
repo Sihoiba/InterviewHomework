@@ -1,7 +1,6 @@
 package sihoiba.interviewHomework.model;
 
 import com.google.common.base.MoreObjects;
-import org.springframework.util.Assert;
 
 import java.util.Objects;
 

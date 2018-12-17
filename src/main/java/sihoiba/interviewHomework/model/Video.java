@@ -15,6 +15,11 @@ public final class Video {
     private String title;
     private LocalDateTime publishedAt;
 
+    public Video( String title, LocalDateTime publishedAt ) {
+        this.title = title;
+        this.publishedAt = publishedAt;
+    }
+
     public Video( Long id, String title, LocalDateTime publishedAt ) {
         this.id = id;
         this.title = title;

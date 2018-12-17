@@ -1,10 +1,5 @@
 package sihoiba.interviewHomework.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
-
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,11 +10,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import sihoiba.interviewHomework.model.Channel;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
+
 /**
- * Test for {@link sihoiba.interviewHomework.persistence.ChannelsDao}
+ * Test for {@link ChannelsDao}
  */
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( classes = DaoTestConfiguration.class )

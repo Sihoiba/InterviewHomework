@@ -11,6 +11,9 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
+/**
+ * Configuration class for DAO unit tests
+ */
 public class DaoTestConfiguration {
 
     @Bean
