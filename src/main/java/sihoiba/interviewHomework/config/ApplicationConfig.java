@@ -39,16 +39,10 @@ public class ApplicationConfig {
 
     @Bean
     public YouTube youtube() {
-        try {
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            HttpTransport httpTransport  = new NetHttpTransport();
-            GoogleCredential credential = GoogleCredential.getApplicationDefault( httpTransport, jsonFactory );
-            YouTube.Builder youtubeBuilder = new YouTube.Builder( new NetHttpTransport(), new JacksonFactory(), credential );
-            return youtubeBuilder.setApplicationName( "interview application" ).build();
-        } catch ( IOException e ) {
-            LOG.error( "Cannot create Youtube client: {}", e.getMessage() );
-            throw new ApplicationException( "Cannot create youTube client", e );
-        }
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        HttpTransport httpTransport = new NetHttpTransport();
+        YouTube.Builder youtubeBuilder = new YouTube.Builder( httpTransport, jsonFactory, null );
+        return youtubeBuilder.setApplicationName( "interview application" ).build();
     }
 
 
