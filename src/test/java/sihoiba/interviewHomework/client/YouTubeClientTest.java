@@ -7,8 +7,10 @@ import com.google.api.services.youtube.model.ChannelSnippet;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -20,9 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 
 /**
  * Unit test for {@link YouTubeClient}
@@ -41,6 +46,11 @@ public class YouTubeClientTest {
 
     private static final String API_KEY = "api_key";
 
+    @Before
+    public void setup() {
+        classUnderTest.setApiKey( API_KEY );
+    }
+
     @Test
     public void shouldGetVideoDetails() throws Exception {
         // Given
@@ -50,9 +60,9 @@ public class YouTubeClientTest {
         YouTube.Search.List mockSearchList = mock( YouTube.Search.List.class );
 
         ChannelListResponse channelListResponse = new ChannelListResponse();
-        Channel wantedChannel1 = getChannel( "globalmtb" );
-        Channel wantedChannel2 = getChannel(  "GlobalCyclingNetwork" );
-        Channel unwantedChannel = getChannel( "unwanted" );
+        Channel wantedChannel1 = getChannel( "globalmtb", "globalmtb_id" );
+        Channel wantedChannel2 = getChannel(  "GlobalCyclingNetwork","GlobalCyclingNetwork_id" );
+        Channel unwantedChannel = getChannel( "unwanted","unwanted_id" );
         List<Channel> channelsList = new ArrayList<>( Arrays.asList( wantedChannel1, wantedChannel2, unwantedChannel ) );
         channelListResponse.setItems( channelsList );
 
@@ -85,7 +95,21 @@ public class YouTubeClientTest {
         List<SearchResultSnippet> results = classUnderTest.getVideoDetails();
 
         // Then
-
+        assertThat( results ).hasSize( 2 );
+        assertThat( results.get( 0 ) ).hasFieldOrPropertyWithValue( "title", "PRO" );
+        assertThat( results.get( 1 ) ).hasFieldOrPropertyWithValue( "title", "matt stephens" );
+        then( mockYouTube ).should().channels();
+        then( mockChannels ).should().list( "id, snippet" );
+        then( mockChannelsList ).should().setOauthToken( API_KEY );
+        then( mockChannelsList ).should().execute();
+        then( mockChannelsDao ).should().getAllChannels();
+        then( mockYouTube ).should( times( 2 ) ).search();
+        then( mockSearch ).should( times( 2 ) ).list( "snippet" );
+        then( mockSearchList ).should( times( 2 ) ).setOauthToken( API_KEY );
+        ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass( String.class );
+        then( mockSearchList ).should( times( 2 ) ).setChannelId( stringArgumentCaptor.capture() );
+        assertThat( stringArgumentCaptor.getAllValues() ).containsExactlyInAnyOrder( "globalmtb_id", "GlobalCyclingNetwork_id" );
+        then( mockSearchList ).should( times( 2 ) ).execute();
     }
 
     private SearchResult getSearchResult( String title ) {
@@ -96,10 +120,11 @@ public class YouTubeClientTest {
         return searchResult;
     }
 
-    private Channel getChannel( String title ) {
+    private Channel getChannel( String title, String id ) {
         Channel channel = new Channel();
         ChannelSnippet channelSnippet = new ChannelSnippet();
         channelSnippet.setTitle( title );
+        channel.setId( id );
         channel.setSnippet( channelSnippet );
         return channel;
     }
