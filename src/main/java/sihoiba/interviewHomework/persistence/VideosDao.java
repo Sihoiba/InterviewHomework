@@ -85,6 +85,25 @@ public class VideosDao {
     }
 
     /**
+     * Gets all stored {@link sihoiba.interviewHomework.model.Video}s whose titles contains the matching search term, case insensitive matching
+     * @param valueToMatch the value to check for
+     * @return the videos with matching titles
+     */
+    public List<Video> findVideosWithMatchingTitle( String valueToMatch ) {
+        Assert.notNull( valueToMatch, "valueToMatch must not be null" );
+
+        String selectQuery = "SELECT id, title, date FROM mydb.videos WHERE UPPER(title) LIKE ?";
+        String value = "%" + valueToMatch.toUpperCase() + "%";
+        Object[] selectParams = new Object[] { value };
+        List<Video> videos = jdbcTemplate.query( selectQuery, selectParams, new VideosRowMapper() );
+        if ( videos.isEmpty() ) {
+            LOG.info( "No video found with title {}", valueToMatch );
+            return null;
+        }
+        return videos;
+    }
+
+    /**
      * Deletes the {@link sihoiba.interviewHomework.model.Video} with the corresponding id
      * @param id the id of the video to delete
      */

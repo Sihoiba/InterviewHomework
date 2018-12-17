@@ -9,12 +9,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import sihoiba.interviewHomework.client.YouTubeClient;
+import sihoiba.interviewHomework.model.SearchField;
+import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
+import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
 import sihoiba.interviewHomework.persistence.VideosDao;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -124,7 +128,44 @@ public class YoutubeVideoDetailsServiceTest {
 		then( mockVideosDao ).should().delete( 1L );
 		verifyNoMoreInteractions( mockVideosDao );
 		verifyZeroInteractions( mockYouTubeClient );
+	}
 
+	@Test
+	public void shouldSearchVideos() {
+		// Given
+		String valueToMatch = "cycling";
+		SearchTerm searchTerm = new SearchTerm( SearchField.TITLE, valueToMatch );
+		Video video1 = getInternalVideo( 1L, "cycling world" );
+		Video video2 = getInternalVideo( 2L, "pro cycling" );
+		List<Video> matchingVideos = new ArrayList<>( Arrays.asList( video1, video2 ) );
+		given( mockVideosDao.findVideosWithMatchingTitle( valueToMatch ) ).willReturn( matchingVideos );
+
+		// When
+		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTerm );
+
+		//Then
+		assertThat( results ).isNotNull();
+		assertThat( results ).extracting( "id" ).containsExactly( 1L, 2L );
+		assertThat( results ).extracting( "title" ).containsExactly( "cycling world", "pro cycling" );
+		then( mockVideosDao ).should().findVideosWithMatchingTitle( valueToMatch );
+		verifyNoMoreInteractions( mockVideosDao );
+		verifyZeroInteractions( mockYouTubeClient );
+	}
+
+	@Test
+	public void shouldSearchVideosGivenNoMatchingVideosFound() {
+		// Given
+		String valueToMatch = "cycling";
+		SearchTerm searchTerm = new SearchTerm( SearchField.TITLE, valueToMatch );
+		List<Video> matchingVideos = new ArrayList<>();
+		given( mockVideosDao.findVideosWithMatchingTitle( valueToMatch ) ).willReturn( matchingVideos );
+
+		// When
+		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTerm );
+
+		//Then
+		assertThat( results ).isNotNull();
+		assertThat( results ).isEmpty();
 	}
 
 	private SearchResultSnippet getSearchResultSnippet( String title ) {

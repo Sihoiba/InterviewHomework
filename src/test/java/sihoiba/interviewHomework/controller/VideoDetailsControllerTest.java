@@ -5,7 +5,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import sihoiba.interviewHomework.model.SearchField;
+import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
+import sihoiba.interviewHomework.model.VideoDetailsSearchResponse;
+import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
 import sihoiba.interviewHomework.service.YoutubeVideoDetailsService;
 
 import java.time.LocalDateTime;
@@ -129,15 +133,16 @@ public class VideoDetailsControllerTest {
     @Test
     public void shouldFindMatchingGivenSearchTerm() {
         //Given
-        String searchTerm = "term";
-        List<Video> videosReturned = new ArrayList<>();
+        SearchTerm searchTerm = new SearchTerm( SearchField.TITLE,"term" );
+        List<VideoDetailsSearchResult> videosReturned = new ArrayList<>();
         given( mockYoutubeVideoDetailService.searchVideos( searchTerm ) ).willReturn( videosReturned );
 
         //When
-        List<Video> results = classUnderTest.searchVideoDetails( searchTerm );
+       VideoDetailsSearchResponse response = classUnderTest.searchVideoDetails( searchTerm );
 
         //Then
-        assertThat( results ).containsExactlyElementsOf( videosReturned );
+        assertThat( response ).isNotNull();
+        assertThat( response.getResults() ).containsExactlyElementsOf( videosReturned );
         then( mockYoutubeVideoDetailService ).should().searchVideos( searchTerm );
         verifyNoMoreInteractions( mockYoutubeVideoDetailService );
 
@@ -146,7 +151,7 @@ public class VideoDetailsControllerTest {
     @Test
     public void shouldNotFindMatchingGivenNullSearchTerm() {
         // Given
-        String searchTerm = null;
+        SearchTerm searchTerm = null;
 
         // When
         try {

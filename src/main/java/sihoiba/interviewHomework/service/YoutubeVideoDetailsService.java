@@ -6,10 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sihoiba.interviewHomework.client.YouTubeClient;
+import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
+import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
 import sihoiba.interviewHomework.persistence.VideosDao;
 import sihoiba.interviewHomework.util.GoogleDateTimeConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +50,25 @@ public class YoutubeVideoDetailsService {
         videosDao.delete( id );
     }
 
-    public List<Video> searchVideos( String searchTerm ) {
-        return null;
+    public List<VideoDetailsSearchResult> searchVideos( SearchTerm searchTerm ) {
+        List<Video> matchingVideos = new ArrayList<>();
+        switch ( searchTerm.getSearchField() ) {
+            case TITLE:
+                matchingVideos = videosDao.findVideosWithMatchingTitle( searchTerm.getValueToMatch() );
+                break;
+            default:
+                return new ArrayList<>();
+        }
+
+        if ( !matchingVideos.isEmpty() ) {
+            List<VideoDetailsSearchResult> results = new ArrayList<>();
+            for( Video matchingVideo : matchingVideos ) {
+                VideoDetailsSearchResult matchingResult = new VideoDetailsSearchResult( matchingVideo.getId(), matchingVideo.getTitle() );
+                results.add( matchingResult );
+            }
+            return results;
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

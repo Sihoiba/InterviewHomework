@@ -147,6 +147,44 @@ public class VideosDaoTest {
     }
 
     @Test
+    public void shouldFindVideosWithMatchingTitles() {
+        // Given
+        String searchTerm = "cycling";
+        Long id1 = 1L;
+        String title1 = "someTitle" + searchTerm.toUpperCase();
+        LocalDateTime now1 = LocalDateTime.now().withNano( 0 );
+        createVideo( id1, title1, now1 );
+
+        Long id2 = 2L;
+        String title2 = "someTitle";
+        LocalDateTime now2 = LocalDateTime.now().withNano( 0 );
+        createVideo( id2, title2, now2 );
+
+        // When
+        List<Video> result = videosDao.findVideosWithMatchingTitle( searchTerm );
+
+        // Then
+        assertThat( result ).hasSize( 1 );
+        assertThat( result.get( 0 ) ).hasFieldOrPropertyWithValue( "id", id1 )
+                .hasFieldOrPropertyWithValue( "title", title1 )
+                .hasFieldOrPropertyWithValue( "publishedAt", now1 );
+    }
+
+    @Test
+    public void shouldFailToFindVideosWithMatchingTitlesGivenNullValueToMatch() {
+        // Given
+
+        // When
+        try {
+            videosDao.findVideosWithMatchingTitle( null );
+            shouldHaveThrown( IllegalArgumentException.class );
+            // Then
+        } catch ( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "valueToMatch must not be null" );
+        }
+    }
+
+    @Test
     public void shouldDeleteVideo() {
         // Given
         Long id = 1L;

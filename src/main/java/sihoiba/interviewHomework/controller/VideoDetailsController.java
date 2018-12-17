@@ -3,6 +3,7 @@ package sihoiba.interviewHomework.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
+import sihoiba.interviewHomework.model.VideoDetailsSearchResponse;
 import sihoiba.interviewHomework.service.YoutubeVideoDetailsService;
 
 import javax.validation.constraints.NotNull;
@@ -34,13 +37,13 @@ public class VideoDetailsController {
         youtubeVideoDetailsService.populateVideoDetails();
     }
 
-    @GetMapping( path="/video/getAll" )
+    @GetMapping( path="/video/getAll", produces = { MediaType.APPLICATION_JSON_VALUE } )
     public List<Video> getAllVideoDetails() {
         LOG.info( "Getting all stored video details." );
         return youtubeVideoDetailsService.getAllStoredVideoDetails();
     }
 
-    @GetMapping( path="/video/{id}" )
+    @GetMapping( path="/video/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } )
     public Video getVideoDetailsById( @PathVariable Long id ) {
         Assert.notNull( id, "id must not be null." );
         LOG.info( "Getting stored video details with {}", id );
@@ -54,10 +57,10 @@ public class VideoDetailsController {
         youtubeVideoDetailsService.deleteVideoDetails( id );
     }
 
-    @GetMapping( path="/video/search" )
-    public List<Video> searchVideoDetails( @NotNull @RequestBody String searchTerm ) {
+    @PostMapping( path="/video/search", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE } )
+    public VideoDetailsSearchResponse searchVideoDetails( @NotNull @RequestBody SearchTerm searchTerm ) {
         Assert.notNull( searchTerm, "searchTerm must not be null." );
         LOG.info( "Searching by {}", searchTerm );
-        return youtubeVideoDetailsService.searchVideos( searchTerm );
+        return new VideoDetailsSearchResponse( youtubeVideoDetailsService.searchVideos( searchTerm ) );
     }
 }
