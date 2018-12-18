@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration( classes = DefaultTestConfiguration.class )
 @TestPropertySource( "/test.properties" )
 @DirtiesContext
-public class ApplicationIT {
+public class ApplicationAppT {
 
-    private static final Logger LOG = LoggerFactory.getLogger( ApplicationIT.class );
+    private static final Logger LOG = LoggerFactory.getLogger( ApplicationAppT.class );
 
     @Autowired
     private TestRestTemplate restTemplate;
