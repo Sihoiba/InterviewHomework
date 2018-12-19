@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import sihoiba.interviewHomework.model.Video;
 
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * DAO for interacting with the videos database table.
  */
+@Repository
 public class VideosDao {
 
     private static final Logger LOG = LoggerFactory.getLogger( VideosDao.class );
