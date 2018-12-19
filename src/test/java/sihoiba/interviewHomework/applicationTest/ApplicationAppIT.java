@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,9 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration( classes = DefaultTestConfiguration.class )
 @TestPropertySource( "/test.properties" )
 @DirtiesContext
-public class ApplicationAppT {
+@EnableAutoConfiguration
+public class ApplicationAppIT {
 
-    private static final Logger LOG = LoggerFactory.getLogger( ApplicationAppT.class );
+    private static final Logger LOG = LoggerFactory.getLogger( ApplicationAppIT.class );
 
     @Autowired
     private TestRestTemplate restTemplate;
