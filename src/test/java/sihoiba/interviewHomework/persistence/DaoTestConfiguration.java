@@ -22,7 +22,7 @@ public class DaoTestConfiguration {
         dataSource.setDriverClassName("org.h2.Driver");
         dataSource.setUrl("jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1");
         dataSource.setUsername("sa");
-        dataSource.setPassword("sa");
+        dataSource.setPassword("");
 
         Resource initSchema = new ClassPathResource("youtube.sql");
         DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema);

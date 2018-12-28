@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sihoiba.interviewHomework.exception.EntityNotFoundException;
 import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResponse;
@@ -44,7 +45,7 @@ public class VideoDetailsController {
     }
 
     @GetMapping( path="/video/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } )
-    public Video getVideoDetailsById( @PathVariable Long id ) {
+    public Video getVideoDetailsById( @PathVariable Long id ) throws EntityNotFoundException {
         Assert.notNull( id, "id must not be null." );
         LOG.info( "Getting stored video details with {}", id );
         return youtubeVideoDetailsService.getVideoDetails( id );

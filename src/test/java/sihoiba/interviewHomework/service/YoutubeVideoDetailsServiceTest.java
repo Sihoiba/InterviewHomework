@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import sihoiba.interviewHomework.client.YouTubeClient;
+import sihoiba.interviewHomework.exception.EntityNotFoundException;
 import sihoiba.interviewHomework.model.SearchField;
 import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
@@ -23,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -101,7 +103,7 @@ public class YoutubeVideoDetailsServiceTest {
 	}
 
 	@Test
-	public void shouldGetVideoDetails() {
+	public void shouldGetVideoDetails() throws Exception {
 		// Given
 		Video video = getInternalVideo( 1L, "test video 1" );
 		given( mockVideosDao.get( 1L ) ).willReturn( video );
@@ -114,6 +116,24 @@ public class YoutubeVideoDetailsServiceTest {
 		then( mockVideosDao ).should().get( 1L );
 		verifyNoMoreInteractions( mockVideosDao );
 		verifyZeroInteractions( mockYouTubeClient );
+	}
+
+	@Test
+	public void shouldThrowExceptionGivenNoMatchingVideoFound() {
+		// Given
+		given( mockVideosDao.get( 1L ) ).willReturn( null );
+
+		// When
+		try {
+			classUnderTest.getVideoDetails( 1L );
+			shouldHaveThrown( EntityNotFoundException.class );
+			// Then
+		} catch( EntityNotFoundException expected ) {
+			assertThat( expected ).hasMessage( "No matching video with id: 1" );
+			then( mockVideosDao ).should().get( 1L );
+			verifyNoMoreInteractions( mockVideosDao );
+			verifyZeroInteractions( mockYouTubeClient );
+		}
 	}
 
 	@Test

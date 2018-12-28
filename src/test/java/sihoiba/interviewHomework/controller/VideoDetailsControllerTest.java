@@ -69,7 +69,7 @@ public class VideoDetailsControllerTest {
     }
 
     @Test
-    public void shouldGetVideoDetails() {
+    public void shouldGetVideoDetails() throws Exception {
         // Given
         Long id = 10L;
         Video expectedVideo = givenAVideoDetails( id );
@@ -84,7 +84,7 @@ public class VideoDetailsControllerTest {
     }
 
     @Test
-    public void shouldNotGetVideoDetailsGivenNullId() {
+    public void shouldNotGetVideoDetailsGivenNullId() throws Exception {
         // Given
         Long id = null;
 

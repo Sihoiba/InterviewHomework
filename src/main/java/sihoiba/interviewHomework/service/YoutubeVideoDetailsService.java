@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sihoiba.interviewHomework.client.YouTubeClient;
+import sihoiba.interviewHomework.exception.EntityNotFoundException;
 import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
@@ -42,8 +43,12 @@ public class YoutubeVideoDetailsService {
         return videosDao.getAllVideos();
     }
 
-    public Video getVideoDetails( Long id ) {
-        return videosDao.get( id );
+    public Video getVideoDetails( Long id ) throws EntityNotFoundException {
+        Video video = videosDao.get( id );
+        if ( video == null ) {
+            throw new EntityNotFoundException( "No matching video with id: " + id );
+        }
+        return video;
     }
 
     public void deleteVideoDetails( Long id ) {
