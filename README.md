@@ -37,7 +37,6 @@ spring.jpa.database-platform=org.hibernate.dialect.H2Dialect #Replace with the v
 
 ######## Application properties ########
 interview-homework.youtube.api.token=[youtube apu token
-interview-homework.youtube.search.filter.name=[name of the search filter file]
 ```
 
 java -jar interviewHomework-0.0.1-SNAPSHOT.jar
