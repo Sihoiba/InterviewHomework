@@ -1,5 +1,7 @@
 package sihoiba.interviewHomework.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 import java.util.List;
@@ -12,7 +14,8 @@ public final class VideoDetailsSearchResponse {
 
     private final List<VideoDetailsSearchResult> results;
 
-    public VideoDetailsSearchResponse( List<VideoDetailsSearchResult> results ) {
+    @JsonCreator
+    public VideoDetailsSearchResponse( @JsonProperty( "results" ) List<VideoDetailsSearchResult> results ) {
         this.results = results;
     }
 

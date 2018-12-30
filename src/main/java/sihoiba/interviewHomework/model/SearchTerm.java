@@ -1,5 +1,9 @@
 package sihoiba.interviewHomework.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -13,7 +17,8 @@ public final class SearchTerm {
     @NotNull
     private String valueToMatch;
 
-    public SearchTerm( SearchField searchField, String valueToMatch ) {
+    @JsonCreator
+    public SearchTerm( @JsonProperty( "searchField" ) SearchField searchField,  @JsonProperty( "valueToMatch" ) String valueToMatch ) {
         this.searchField = searchField;
         this.valueToMatch = valueToMatch;
     }

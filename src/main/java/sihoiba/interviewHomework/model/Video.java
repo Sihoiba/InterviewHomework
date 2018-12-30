@@ -1,5 +1,9 @@
 package sihoiba.interviewHomework.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.base.MoreObjects;
 
 import javax.persistence.Entity;
@@ -14,7 +18,7 @@ import java.util.Objects;
  * The stored details of a video
  */
 @Entity
-@Table( name="videos" )
+@Table( name = "videos" )
 public final class Video {
 
     @Id
@@ -22,6 +26,9 @@ public final class Video {
     private Long id;
 
     private String title;
+
+    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    @JsonDeserialize( using = LocalDateTimeDeserializer.class )
     private LocalDateTime publishedAt;
 
     protected Video() {
@@ -71,8 +78,8 @@ public final class Video {
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formatDateTime = publishedAt.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" );
+        String formatDateTime = publishedAt.format( formatter );
         return MoreObjects.toStringHelper( this )
                 .add( "id", id )
                 .add( "title", title )

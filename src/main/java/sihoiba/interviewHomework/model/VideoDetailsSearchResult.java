@@ -1,5 +1,7 @@
 package sihoiba.interviewHomework.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import org.springframework.util.Assert;
 
@@ -13,7 +15,8 @@ public final class VideoDetailsSearchResult {
     private final Long id;
     private final String title;
 
-    public VideoDetailsSearchResult( Long id, String title ) {
+    @JsonCreator
+    public VideoDetailsSearchResult( @JsonProperty( "id" ) Long id, @JsonProperty( "title" ) String title ) {
         Assert.notNull( id, "id must not be null" );
         Assert.notNull( title, "id must not be null" );
         this.id = id;
