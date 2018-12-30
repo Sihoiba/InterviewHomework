@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 import sihoiba.interviewHomework.model.Video;
@@ -21,6 +22,9 @@ import static org.assertj.core.api.Assertions.shouldHaveThrown;
 @RunWith( SpringRunner.class)
 @DataJpaTest
 public class VideosRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     VideosRepository classUnderTest;
@@ -61,7 +65,7 @@ public class VideosRepositoryTest {
         // Given
         String title = "someTitle";
         LocalDateTime now = LocalDateTime.now();
-        Video created = classUnderTest.save( new Video( title, now ) );
+        Video created = entityManager.persist( new Video( title, now ) );
 
         // When
         Optional<Video> result = classUnderTest.findById( created.getId() );
@@ -103,11 +107,11 @@ public class VideosRepositoryTest {
         // Given
         String title1 = "someTitle1";
         LocalDateTime now1 = LocalDateTime.now().withNano( 0 );
-        Video video1 = classUnderTest.save( new Video( title1, now1 ) );
+        Video video1 = entityManager.persist( new Video( title1, now1 ) );
 
         String title2 = "someTitle2";
         LocalDateTime now2 = LocalDateTime.now().withNano( 0 );
-        Video video2 = classUnderTest.save( new Video( title2, now2 ) );
+        Video video2 = entityManager.persist( new Video( title2, now2 ) );
 
         // When
         List<Video> result = classUnderTest.findAll();
@@ -123,11 +127,11 @@ public class VideosRepositoryTest {
         String searchTerm = "cycling";
         String title1 = "someTitle" + searchTerm.toUpperCase();
         LocalDateTime now1 = LocalDateTime.now().withNano( 0 );
-        Video video1 = classUnderTest.save( new Video( title1, now1 ) );
+        Video video1 = entityManager.persist( new Video( title1, now1 ) );
 
         String title2 = "someTitle";
         LocalDateTime now2 = LocalDateTime.now().withNano( 0 );
-        classUnderTest.save( new Video( title2, now2 ) );
+        entityManager.persist( new Video( title2, now2 ) );
 
         // When
         List<Video> result = classUnderTest.findByTitleContainingIgnoreCase( searchTerm );
@@ -156,16 +160,14 @@ public class VideosRepositoryTest {
         // Given
         String title = "someTitle";
         LocalDateTime now = LocalDateTime.now();
-        Video video = classUnderTest.save( new Video( title, now ) );
-        Optional<Video> created = classUnderTest.findById( video.getId() );
-        assertThat( created.isPresent() ).isTrue();
+        Video video = entityManager.persist( new Video( title, now ) );
 
         // When
         classUnderTest.deleteById( video.getId() );
 
         // Then
-        Optional<Video> deleted = classUnderTest.findById( video.getId() );
-        assertThat( deleted.isPresent() ).isFalse();
+        Video deleted = entityManager.find( Video.class, video.getId() );
+        assertThat( deleted ).isNull();
 
     }
 

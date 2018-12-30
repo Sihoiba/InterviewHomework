@@ -8,19 +8,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
-import sihoiba.interviewHomework.applicationTest.DefaultTestConfiguration;
 import sihoiba.interviewHomework.client.YouTubeClient;
 import sihoiba.interviewHomework.controller.ControllerErrorHandler;
 import sihoiba.interviewHomework.controller.VideoDetailsController;
@@ -44,8 +44,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  */
 @RunWith( SpringRunner.class )
 @WebMvcTest( controllers = { VideoDetailsController.class, ControllerErrorHandler.class }, secure = false )
+@SpringBootTest
 @DirtiesContext( classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD )
-@ContextConfiguration( classes = { DefaultTestConfiguration.class } )
 public class VideoDetailsIT {
 
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now().withNano( 0 );
@@ -53,14 +53,14 @@ public class VideoDetailsIT {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private YouTubeClient mockYouTubeClient;
-
-    @Mock
-    private RestTemplate mockRestTemplate;
 
     @Autowired
     private WebApplicationContext context;
+
+    @Mock
+    private RestTemplate mockRestTemplate;
 
     @Before
     public void setup() {

@@ -4,12 +4,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 import sihoiba.interviewHomework.model.Channel;
-import sihoiba.interviewHomework.model.Video;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +20,9 @@ import static org.assertj.core.api.Assertions.shouldHaveThrown;
 @RunWith( SpringRunner.class)
 @DataJpaTest
 public class ChannelsRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     ChannelsRepository classUnderTest;
@@ -57,11 +59,11 @@ public class ChannelsRepositoryTest {
     @Test
     public void shouldFindAllVideos() {
         // Given
-        String channelName = "someChannel";
-        Channel channel1 = classUnderTest.save( new Channel( channelName ) );
+        String channelName1 = "someChannel";
+        Channel channel1 = entityManager.persist( new Channel( channelName1 ) );
 
-        String title2 = "someOtherChannel";
-        Channel channel2 = classUnderTest.save( new Channel( channelName ) );
+        String channelName2 = "someOtherChannel";
+        Channel channel2 = entityManager.persist( new Channel( channelName2 ) );
 
         // When
         List<Channel> result = classUnderTest.findAll();
