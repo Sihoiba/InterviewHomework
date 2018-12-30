@@ -25,7 +25,7 @@ public class ChannelsRepositoryTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    ChannelsRepository classUnderTest;
+    private ChannelsRepository classUnderTest;
 
     @Test
     public void shouldSave() {

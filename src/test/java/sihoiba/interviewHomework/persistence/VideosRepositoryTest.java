@@ -27,7 +27,7 @@ public class VideosRepositoryTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    VideosRepository classUnderTest;
+    private VideosRepository classUnderTest;
 
     @Test
     public void shouldSave() {

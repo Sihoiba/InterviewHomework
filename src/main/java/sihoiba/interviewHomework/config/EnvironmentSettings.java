@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
  */
 public class EnvironmentSettings {
 
-    private String youtubeApiToken;
+    private final String youtubeApiToken;
 
     public EnvironmentSettings( Environment env ) {
         this.youtubeApiToken = env.getRequiredProperty( "interview-homework.youtube.api.token" );

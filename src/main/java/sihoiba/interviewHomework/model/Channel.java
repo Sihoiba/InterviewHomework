@@ -18,7 +18,7 @@ public class Channel {
     @Id
     @GeneratedValue
     private Long id;
-    private String channelName;
+    private final String channelName;
 
     public Channel( String channelName ) {
         this.channelName = channelName;

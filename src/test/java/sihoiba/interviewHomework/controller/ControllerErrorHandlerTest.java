@@ -31,7 +31,7 @@ public class ControllerErrorHandlerTest {
     private ControllerErrorHandler classUnderTest;
 
     @Test
-    public void shouldGetErrorPath() throws Exception {
+    public void shouldGetErrorPath() {
         // Given
 
         // When
@@ -43,7 +43,7 @@ public class ControllerErrorHandlerTest {
     }
 
     @Test
-    public void shouldHandleError() throws Exception {
+    public void shouldHandleError() {
         // Given
         Date start = new Date();
         Map<String, Object> attributes = new HashMap<>();

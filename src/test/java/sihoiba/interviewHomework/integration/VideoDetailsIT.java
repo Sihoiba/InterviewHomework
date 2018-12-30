@@ -70,7 +70,7 @@ public class VideoDetailsIT {
     }
 
     @Test
-    public void shouldPopulateVideoDetails() throws Exception  {
+    public void shouldPopulateVideoDetails() throws Exception {
         // Given
         RequestBuilder request = post( "/videos/populate" );
         SearchResultSnippet returnVideoSnippet1 = getSearchResultSnippet( "test title 1" );
@@ -99,11 +99,11 @@ public class VideoDetailsIT {
         // Then
         assertThat( response.getStatus() ).isEqualTo( HttpStatus.METHOD_NOT_ALLOWED.value() );
         assertThat( response.getHeader( HttpHeaders.ALLOW ) ).isEqualTo( "POST" );
-        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'GET' not supported"  );
+        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'GET' not supported" );
     }
 
     @Test
-    public void shouldFailToPopulateGivenPostMethodUsed() throws Exception  {
+    public void shouldFailToPopulateGivenPostMethodUsed() throws Exception {
         // Given
         RequestBuilder request = put( "/videos/populate" )
                 .contentType( MediaType.TEXT_PLAIN )
@@ -115,11 +115,11 @@ public class VideoDetailsIT {
         // Then
         assertThat( response.getStatus() ).isEqualTo( HttpStatus.METHOD_NOT_ALLOWED.value() );
         assertThat( response.getHeader( HttpHeaders.ALLOW ) ).isEqualTo( "POST" );
-        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'PUT' not supported"  );
+        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'PUT' not supported" );
     }
 
     @Test
-    public void shouldFailToPopulateGivenDeleteMethodUsed() throws Exception  {
+    public void shouldFailToPopulateGivenDeleteMethodUsed() throws Exception {
         // Given
         RequestBuilder request = delete( "/videos/populate" );
 
@@ -129,12 +129,12 @@ public class VideoDetailsIT {
         // Then
         assertThat( response.getStatus() ).isEqualTo( HttpStatus.METHOD_NOT_ALLOWED.value() );
         assertThat( response.getHeader( HttpHeaders.ALLOW ) ).isEqualTo( "POST" );
-        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'DELETE' not supported"  );
+        assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'DELETE' not supported" );
     }
 
     private SearchResultSnippet getSearchResultSnippet( String title ) {
         SearchResultSnippet searchResultSnippet = new SearchResultSnippet();
-        Date date = Date.from(CURRENT_TIME.atZone( ZoneId.systemDefault()).toInstant());
+        Date date = Date.from( CURRENT_TIME.atZone( ZoneId.systemDefault() ).toInstant() );
         searchResultSnippet.setPublishedAt( new DateTime( date ) );
         searchResultSnippet.setTitle( title );
         return searchResultSnippet;

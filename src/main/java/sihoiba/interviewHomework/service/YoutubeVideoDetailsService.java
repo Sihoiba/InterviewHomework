@@ -57,7 +57,7 @@ public class YoutubeVideoDetailsService {
     }
 
     public List<VideoDetailsSearchResult> searchVideos( SearchTerm searchTerm ) {
-        List<Video> matchingVideos = new ArrayList<>();
+        List<Video> matchingVideos;
         switch ( searchTerm.getSearchField() ) {
             case TITLE:
                 matchingVideos = videosRepository.findByTitleContainingIgnoreCase( searchTerm.getValueToMatch() );

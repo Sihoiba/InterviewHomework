@@ -15,23 +15,23 @@ public final class ErrorResponse {
     /**
      * The HTTP status code as a string
      */
-    private String status;
+    private final String status;
     /**
      * The error code; either an internal error code or the HTTP status error e.g. 'Method Not Allowed'
      */
-    private String error;
+    private final String error;
     /**
      * A descriptive message regarding the error
      */
-    private String message;
+    private final String message;
     /**
      * The requested resource path that cause the error
      */
-    private String path;
+    private final String path;
     /**
      * A timestamp the error occurred
      */
-    private Date timestamp;
+    private final Date timestamp;
 
     @JsonCreator
     public ErrorResponse( @JsonProperty( "status" ) String status, @JsonProperty( "error" ) String error,

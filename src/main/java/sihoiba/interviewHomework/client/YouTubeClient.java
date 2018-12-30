@@ -60,7 +60,7 @@ public class YouTubeClient {
 
     /**
      * Get video details from youTube as per the search filter.
-     * @return
+     * @return A list of the retrieved search result snippets.
      */
     public List<SearchResultSnippet> getVideoDetails() {
         List<SearchResultSnippet> videoSnippets = new ArrayList<>();
@@ -113,7 +113,7 @@ public class YouTubeClient {
      * If we were doing authorised requests, we could use this method to get the channel ids.
      * However we only have an API key which is insufficient
      * @return List of Channel Ids
-     * @throws IOException
+     * @throws IOException thrown by the youtube api layer.
      */
     private List<String> getChannelIds() throws IOException {
         ChannelListResponse channelListResponse = youTube.channels().list("id, snippet" ).setMine( true ).setKey( apiKey ).execute();

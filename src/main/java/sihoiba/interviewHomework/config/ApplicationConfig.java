@@ -1,6 +1,5 @@
 package sihoiba.interviewHomework.config;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -14,9 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
-import sihoiba.interviewHomework.exception.ApplicationException;
-
-import java.io.IOException;
 
 /**
  * Application configuration for the interview homework application

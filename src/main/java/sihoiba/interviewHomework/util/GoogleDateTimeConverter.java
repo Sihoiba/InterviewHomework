@@ -16,14 +16,14 @@ public final class GoogleDateTimeConverter {
      *
      * @param dt The original DateTime object
      * @return A parsed java LocalDateTime object
-     * @throws Exception if the returned DateTime does not contain time information or the format is not as expected
+     * @throws RuntimeException if the returned DateTime does not contain time information or the format is not as expected
      */
-    public static final LocalDateTime getDateTime( DateTime dt ) {
+    public static LocalDateTime getDateTime( DateTime dt ) {
         try {
             DateTimeFormatter format = DateTimeFormatter.ofPattern( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" );
             return LocalDateTime.parse( dt.toStringRfc3339(), format );
         } catch ( RuntimeException e ) {
-            LOG.error( "Cannot parse googles datetime format", e );
+            LOG.error( "Cannot parse Google's datetime format", e );
             throw e;
         }
     }

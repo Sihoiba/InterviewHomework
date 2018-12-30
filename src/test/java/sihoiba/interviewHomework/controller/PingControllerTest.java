@@ -13,12 +13,12 @@ public class PingControllerTest {
     private PingController controller;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         controller = new PingController();
     }
 
     @Test
-    public void shouldReturnOK() throws Exception {
+    public void shouldReturnOk() {
 
         // Given
 
