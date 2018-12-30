@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -57,7 +56,7 @@ public class VideoDetailsIT {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now().withNano( 0 );
 
     @Autowired
-    VideosRepository videosRepository;
+    private VideosRepository videosRepository;
 
     @Autowired
     private MockMvc mockMvc;

@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 public final class SearchTerm {
 
     @NotNull
-    private SearchField searchField;
+    private final SearchField searchField;
 
     @NotNull
-    private String valueToMatch;
+    private final String valueToMatch;
 
     @JsonCreator
     public SearchTerm( @JsonProperty( "searchField" ) SearchField searchField,  @JsonProperty( "valueToMatch" ) String valueToMatch ) {
