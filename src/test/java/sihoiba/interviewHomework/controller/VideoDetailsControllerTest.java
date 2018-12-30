@@ -5,8 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import sihoiba.interviewHomework.model.SearchField;
-import sihoiba.interviewHomework.model.SearchTerm;
+import sihoiba.interviewHomework.model.SearchTermType;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResponse;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
@@ -93,7 +92,7 @@ public class VideoDetailsControllerTest {
             classUnderTest.getVideoDetailsById( id );
             shouldHaveThrown( IllegalArgumentException.class );
             // Then
-        } catch( IllegalArgumentException expected ) {
+        } catch ( IllegalArgumentException expected ) {
             assertThat( expected ).hasMessage( "id must not be null." );
             verifyZeroInteractions( mockYoutubeVideoDetailService );
         }
@@ -124,7 +123,7 @@ public class VideoDetailsControllerTest {
             classUnderTest.deleteVideoDetails( id );
             shouldHaveThrown( IllegalArgumentException.class );
             //Then
-        } catch( IllegalArgumentException expected ) {
+        } catch ( IllegalArgumentException expected ) {
             assertThat( expected ).hasMessage( "id must not be null." );
             verifyZeroInteractions( mockYoutubeVideoDetailService );
         }
@@ -133,33 +132,52 @@ public class VideoDetailsControllerTest {
     @Test
     public void shouldFindMatchingGivenSearchTerm() {
         //Given
-        SearchTerm searchTerm = new SearchTerm( SearchField.TITLE,"term" );
+        SearchTermType searchTerm = SearchTermType.TITLE;
+        String value = "cycling";
         List<VideoDetailsSearchResult> videosReturned = new ArrayList<>();
-        given( mockYoutubeVideoDetailService.searchVideos( searchTerm ) ).willReturn( videosReturned );
+        given( mockYoutubeVideoDetailService.searchVideos( searchTerm, value ) ).willReturn( videosReturned );
 
         //When
-       VideoDetailsSearchResponse response = classUnderTest.searchVideoDetails( searchTerm );
+        VideoDetailsSearchResponse response = classUnderTest.searchVideoDetails( searchTerm, value );
 
         //Then
         assertThat( response ).isNotNull();
         assertThat( response.getResults() ).containsExactlyElementsOf( videosReturned );
-        then( mockYoutubeVideoDetailService ).should().searchVideos( searchTerm );
+        then( mockYoutubeVideoDetailService ).should().searchVideos( searchTerm, value );
         verifyNoMoreInteractions( mockYoutubeVideoDetailService );
 
     }
 
     @Test
-    public void shouldNotFindMatchingGivenNullSearchTerm() {
+    public void shouldNotFindMatchingGivenNullSearchTermType() {
         // Given
-        SearchTerm searchTerm = null;
+        SearchTermType searchTerm = null;
+        String value = "cycling";
 
         // When
         try {
-            classUnderTest.searchVideoDetails( searchTerm );
+            classUnderTest.searchVideoDetails( searchTerm, value );
             shouldHaveThrown( IllegalArgumentException.class );
             //Then
-        } catch( IllegalArgumentException expected ) {
-            assertThat( expected ).hasMessage( "searchTerm must not be null." );
+        } catch ( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "searchTermType must not be null." );
+            verifyZeroInteractions( mockYoutubeVideoDetailService );
+        }
+    }
+
+    @Test
+    public void shouldNotFindMatchingGivenNullSearchValue() {
+        // Given
+        SearchTermType searchTerm = SearchTermType.TITLE;
+        String value = null;
+
+        // When
+        try {
+            classUnderTest.searchVideoDetails( searchTerm, value );
+            shouldHaveThrown( IllegalArgumentException.class );
+            //Then
+        } catch ( IllegalArgumentException expected ) {
+            assertThat( expected ).hasMessage( "value must not be null." );
             verifyZeroInteractions( mockYoutubeVideoDetailService );
         }
     }

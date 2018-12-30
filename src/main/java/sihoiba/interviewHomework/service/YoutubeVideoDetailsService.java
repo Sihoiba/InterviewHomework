@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sihoiba.interviewHomework.client.YouTubeClient;
 import sihoiba.interviewHomework.exception.EntityNotFoundException;
-import sihoiba.interviewHomework.model.SearchTerm;
+import sihoiba.interviewHomework.model.SearchTermType;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
 import sihoiba.interviewHomework.persistence.VideosRepository;
@@ -56,11 +56,11 @@ public class YoutubeVideoDetailsService {
         videosRepository.deleteById( id );
     }
 
-    public List<VideoDetailsSearchResult> searchVideos( SearchTerm searchTerm ) {
+    public List<VideoDetailsSearchResult> searchVideos( SearchTermType searchTerm, String value ) {
         List<Video> matchingVideos;
-        switch ( searchTerm.getSearchField() ) {
+        switch ( searchTerm ) {
             case TITLE:
-                matchingVideos = videosRepository.findByTitleContainingIgnoreCase( searchTerm.getValueToMatch() );
+                matchingVideos = videosRepository.findByTitleContainingIgnoreCase( value );
                 break;
             default:
                 return new ArrayList<>();

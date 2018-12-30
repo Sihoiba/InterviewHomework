@@ -10,8 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import sihoiba.interviewHomework.client.YouTubeClient;
 import sihoiba.interviewHomework.exception.EntityNotFoundException;
-import sihoiba.interviewHomework.model.SearchField;
-import sihoiba.interviewHomework.model.SearchTerm;
+import sihoiba.interviewHomework.model.SearchTermType;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
 import sihoiba.interviewHomework.persistence.VideosRepository;
@@ -156,14 +155,14 @@ public class YoutubeVideoDetailsServiceTest {
 	public void shouldSearchVideos() {
 		// Given
 		String valueToMatch = "cycling";
-		SearchTerm searchTerm = new SearchTerm( SearchField.TITLE, valueToMatch );
+		SearchTermType searchTermType = SearchTermType.TITLE;
 		Video video1 = getInternalVideo( 1L, "cycling world" );
 		Video video2 = getInternalVideo( 2L, "pro cycling" );
 		List<Video> matchingVideos = new ArrayList<>( Arrays.asList( video1, video2 ) );
 		given( mockVideosRepository.findByTitleContainingIgnoreCase( valueToMatch ) ).willReturn( matchingVideos );
 
 		// When
-		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTerm );
+		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTermType, valueToMatch );
 
 		//Then
 		assertThat( results ).isNotNull();
@@ -178,12 +177,12 @@ public class YoutubeVideoDetailsServiceTest {
 	public void shouldSearchVideosGivenNoMatchingVideosFound() {
 		// Given
 		String valueToMatch = "cycling";
-		SearchTerm searchTerm = new SearchTerm( SearchField.TITLE, valueToMatch );
+		SearchTermType searchTermType = SearchTermType.TITLE;
 		List<Video> matchingVideos = new ArrayList<>();
 		given( mockVideosRepository.findByTitleContainingIgnoreCase( valueToMatch ) ).willReturn( matchingVideos );
 
 		// When
-		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTerm );
+		List<VideoDetailsSearchResult> results = classUnderTest.searchVideos( searchTermType, valueToMatch );
 
 		//Then
 		assertThat( results ).isNotNull();
