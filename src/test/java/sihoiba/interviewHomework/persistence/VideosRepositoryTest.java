@@ -101,11 +101,11 @@ public class VideosRepositoryTest {
     @Test
     public void shouldFindAllVideos() {
         // Given
-        String title1 = "someTitle";
+        String title1 = "someTitle1";
         LocalDateTime now1 = LocalDateTime.now().withNano( 0 );
         Video video1 = classUnderTest.save( new Video( title1, now1 ) );
 
-        String title2 = "someTitle";
+        String title2 = "someTitle2";
         LocalDateTime now2 = LocalDateTime.now().withNano( 0 );
         Video video2 = classUnderTest.save( new Video( title2, now2 ) );
 
@@ -114,12 +114,7 @@ public class VideosRepositoryTest {
 
         // Then
         assertThat( result ).hasSize( 2 );
-        assertThat( result.get( 0 ) ).hasFieldOrPropertyWithValue( "id", video1.getId() )
-                .hasFieldOrPropertyWithValue( "title", title1 )
-                .hasFieldOrPropertyWithValue( "publishedAt", now1 );
-        assertThat( result.get( 1 ) ).hasFieldOrPropertyWithValue( "id", video2.getId() )
-                .hasFieldOrPropertyWithValue( "title", title2 )
-                .hasFieldOrPropertyWithValue( "publishedAt", now2 );
+        assertThat( result ).containsExactly( video1, video2 );
     }
 
     @Test
@@ -139,9 +134,7 @@ public class VideosRepositoryTest {
 
         // Then
         assertThat( result ).hasSize( 1 );
-        assertThat( result.get( 0 ) ).hasFieldOrPropertyWithValue( "id", video1.getId() )
-                .hasFieldOrPropertyWithValue( "title", title1 )
-                .hasFieldOrPropertyWithValue( "publishedAt", now1 );
+        assertThat( result ).containsExactly( video1 );
     }
 
     @Test

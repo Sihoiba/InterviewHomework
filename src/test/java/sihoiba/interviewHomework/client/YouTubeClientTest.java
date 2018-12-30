@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import sihoiba.interviewHomework.exception.ApplicationException;
-import sihoiba.interviewHomework.persistence.ChannelsDao;
+import sihoiba.interviewHomework.persistence.ChannelsRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class YouTubeClientTest {
     private static final String GLOBALMTB_CHANNEL_ID = "UC_A--fhX5gea0i4UtpD99Gg";
 
     @Mock
-    private ChannelsDao mockChannelsDao;
+    private ChannelsRepository mockChannelsRepository;
 
     @Mock
     private YouTube mockYouTube;
@@ -144,7 +144,7 @@ public class YouTubeClientTest {
         then( mockChannels ).should().list( "id, snippet" );
         then( mockChannelsList ).should().setKey( API_KEY );
         then( mockChannelsList ).should().execute();
-        then( mockChannelsDao ).should().getAllChannels();
+        then( mockChannelsRepository ).should().findAll();
     }
 
     private void givenChannelIdsRetrieved( YouTube.Channels mockChannels, YouTube.Channels.List mockChannelsList ) throws IOException {
@@ -163,7 +163,7 @@ public class YouTubeClientTest {
         given( mockChannels.list( "id, snippet" ) ).willReturn( mockChannelsList );
         given( mockChannelsList.setKey( API_KEY ) ).willReturn( mockChannelsList );
         given( mockChannelsList.execute() ).willReturn( channelListResponse );
-        given( mockChannelsDao.getAllChannels() ).willReturn( wantedChannels );
+        given( mockChannelsRepository.findAll() ).willReturn( wantedChannels );
     }
 
     private SearchResult getSearchResult( String title ) {

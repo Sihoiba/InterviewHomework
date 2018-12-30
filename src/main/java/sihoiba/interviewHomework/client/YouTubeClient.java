@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import sihoiba.interviewHomework.exception.ApplicationException;
-import sihoiba.interviewHomework.persistence.ChannelsDao;
+import sihoiba.interviewHomework.persistence.ChannelsRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class YouTubeClient {
     private static final Long MAX_SEARCH_RESULTS = 50L;
 
     @Autowired
-    private ChannelsDao channelsDao;
+    private ChannelsRepository channelsRepository;
 
     @Autowired
     private YouTube youTube;
@@ -129,7 +129,7 @@ public class YouTubeClient {
     }
 
     private List<String> getWantedChannelTitles() {
-        List<sihoiba.interviewHomework.model.Channel> wantedChannels = channelsDao.getAllChannels();
+        List<sihoiba.interviewHomework.model.Channel> wantedChannels = channelsRepository.findAll();
         List<String> wantedChannelTitles = new ArrayList<>();
         for( sihoiba.interviewHomework.model.Channel wantedChannel: wantedChannels ) {
             wantedChannelTitles.add( wantedChannel.getChannelName() );

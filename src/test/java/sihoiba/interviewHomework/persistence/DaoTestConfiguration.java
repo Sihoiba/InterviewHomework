@@ -35,9 +35,4 @@ public class DaoTestConfiguration {
     JdbcTemplate jdbcTemplate( DataSource dataSource ) {
         return new JdbcTemplate( dataSource );
     }
-
-    @Bean
-    ChannelsDao channelsDao( JdbcTemplate jdbcTemplate ) {
-        return new ChannelsDao( jdbcTemplate );
-    }
 }
