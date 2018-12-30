@@ -31,14 +31,13 @@ public class VideoDetailsController {
     @Autowired
     private YoutubeVideoDetailsService youtubeVideoDetailsService;
 
-    @PostMapping( path="/video/populate" )
+    @PostMapping( path="/videos/populate" )
     public void populateVideoDetails() {
         LOG.info( "Populating stored video details" );
-
         youtubeVideoDetailsService.populateVideoDetails();
     }
 
-    @GetMapping( path="/video/getAll", produces = { MediaType.APPLICATION_JSON_VALUE } )
+    @GetMapping( path="/videos/getAll", produces = { MediaType.APPLICATION_JSON_VALUE } )
     public List<Video> getAllVideoDetails() {
         LOG.info( "Getting all stored video details." );
         return youtubeVideoDetailsService.getAllStoredVideoDetails();
@@ -58,7 +57,7 @@ public class VideoDetailsController {
         youtubeVideoDetailsService.deleteVideoDetails( id );
     }
 
-    @PostMapping( path="/video/search", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE } )
+    @PostMapping( path="/videos/search", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE } )
     public VideoDetailsSearchResponse searchVideoDetails( @NotNull @RequestBody SearchTerm searchTerm ) {
         Assert.notNull( searchTerm, "searchTerm must not be null." );
         LOG.info( "Searching by {}", searchTerm );

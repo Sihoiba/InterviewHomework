@@ -10,11 +10,12 @@ import sihoiba.interviewHomework.exception.EntityNotFoundException;
 import sihoiba.interviewHomework.model.SearchTerm;
 import sihoiba.interviewHomework.model.Video;
 import sihoiba.interviewHomework.model.VideoDetailsSearchResult;
-import sihoiba.interviewHomework.persistence.VideosDao;
+import sihoiba.interviewHomework.persistence.VideosRepository;
 import sihoiba.interviewHomework.util.GoogleDateTimeConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service class responsible for retrieving, storing and deleting video details.
@@ -28,38 +29,38 @@ public class YoutubeVideoDetailsService {
     private YouTubeClient youtubeClient;
 
     @Autowired
-    private VideosDao videosDao;
+    private VideosRepository videosRepository;
 
     public void populateVideoDetails() {
         List<SearchResultSnippet> videoSnippets = youtubeClient.getVideoDetails();
         for ( SearchResultSnippet videoSnippet : videoSnippets ) {
             LOG.info( "Storing details for video with title {}", videoSnippet.getTitle() );
             Video video = new Video( videoSnippet.getTitle(), GoogleDateTimeConverter.getDateTime( videoSnippet.getPublishedAt() ) );
-            videosDao.create( video );
+            videosRepository.save( video );
         }
     }
 
     public List<Video> getAllStoredVideoDetails() {
-        return videosDao.getAllVideos();
+        return videosRepository.findAll();
     }
 
     public Video getVideoDetails( Long id ) throws EntityNotFoundException {
-        Video video = videosDao.get( id );
-        if ( video == null ) {
+        Optional<Video> videoOpt = videosRepository.findById( id );
+        if ( !videoOpt.isPresent() ) {
             throw new EntityNotFoundException( "No matching video with id: " + id );
         }
-        return video;
+        return videoOpt.get();
     }
 
     public void deleteVideoDetails( Long id ) {
-        videosDao.delete( id );
+        videosRepository.deleteById( id );
     }
 
     public List<VideoDetailsSearchResult> searchVideos( SearchTerm searchTerm ) {
         List<Video> matchingVideos = new ArrayList<>();
         switch ( searchTerm.getSearchField() ) {
             case TITLE:
-                matchingVideos = videosDao.findVideosWithMatchingTitle( searchTerm.getValueToMatch() );
+                matchingVideos = videosRepository.findByTitleContainingIgnoreCase( searchTerm.getValueToMatch() );
                 break;
             default:
                 return new ArrayList<>();

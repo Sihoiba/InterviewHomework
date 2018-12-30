@@ -2,6 +2,10 @@ package sihoiba.interviewHomework.model;
 
 import com.google.common.base.MoreObjects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -9,11 +13,19 @@ import java.util.Objects;
 /**
  * The stored details of a video
  */
+@Entity
+@Table( name="videos" )
 public final class Video {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String title;
     private LocalDateTime publishedAt;
+
+    protected Video() {
+    }
 
     public Video( String title, LocalDateTime publishedAt ) {
         this.title = title;

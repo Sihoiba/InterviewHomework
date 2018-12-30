@@ -1,6 +1,7 @@
 package sihoiba.interviewHomework.persistence;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.shouldHaveThrown;
 @DirtiesContext( classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD )
 public class ChannelsDaoTest {
 
-	private static final Logger LOG = LoggerFactory.getLogger( VideosDaoTest.class );
+	private static final Logger LOG = LoggerFactory.getLogger( ChannelsDaoTest.class );
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -33,6 +34,7 @@ public class ChannelsDaoTest {
 	@Autowired
 	ChannelsDao channelsDao;
 
+	@Before
 	@After
 	public void tearDown() {
 		String query = "TRUNCATE TABLE mydb.channels";

@@ -1,6 +1,5 @@
 package sihoiba.interviewHomework.applicationTest;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Properties;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -25,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith( SpringRunner.class )
 @SpringBootTest( webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT )
 @ContextConfiguration( classes = DefaultTestConfiguration.class )
-@TestPropertySource( "/test.properties" )
+@TestPropertySource( locations = "classpath:test.properties" )
 @DirtiesContext
 @EnableAutoConfiguration
 public class ApplicationAppIT {
@@ -34,13 +31,6 @@ public class ApplicationAppIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-    private static Properties testProperties;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        loadTestProperties();
-    }
 
     @Test
     public void shouldPing() {
@@ -58,10 +48,5 @@ public class ApplicationAppIT {
         String pingResponse = restTemplate.getForObject( "/ping", String.class );
         LOG.info( "Ping response: {}", pingResponse );
         return pingResponse;
-    }
-
-    private static void loadTestProperties() throws Exception {
-        testProperties = new Properties();
-        testProperties.load( Class.class.getResourceAsStream( "/test.properties" ) );
     }
 }
