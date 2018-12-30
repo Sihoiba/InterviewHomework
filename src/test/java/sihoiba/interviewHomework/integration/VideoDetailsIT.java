@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -22,8 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import sihoiba.interviewHomework.client.YouTubeClient;
-import sihoiba.interviewHomework.controller.ControllerErrorHandler;
-import sihoiba.interviewHomework.controller.VideoDetailsController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,8 +41,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * Integration tests for the VideoDetails Controller endpoint.
  */
 @RunWith( SpringRunner.class )
-@WebMvcTest( controllers = { VideoDetailsController.class, ControllerErrorHandler.class }, secure = false )
 @SpringBootTest
+@AutoConfigureMockMvc
 @DirtiesContext( classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD )
 public class VideoDetailsIT {
 
