@@ -1,9 +1,8 @@
 package sihoiba.interviewHomework.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.base.MoreObjects;
 
 import javax.persistence.Entity;
@@ -27,7 +26,7 @@ public final class Video {
 
     private String title;
 
-    @JsonSerialize( using = LocalDateTimeSerializer.class )
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize( using = LocalDateTimeDeserializer.class )
     private LocalDateTime publishedAt;
 

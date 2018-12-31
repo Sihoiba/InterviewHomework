@@ -1,8 +1,5 @@
 package sihoiba.interviewHomework.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -43,6 +40,5 @@ public class ApplicationConfig {
         YouTube.Builder youtubeBuilder = new YouTube.Builder( httpTransport, jsonFactory, null );
         return youtubeBuilder.setApplicationName( "interview application" ).build();
     }
-
 
 }

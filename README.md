@@ -41,4 +41,26 @@ interview-homework.youtube.api.token=[youtube apu token
 
 java -jar interviewHomework-0.0.1-SNAPSHOT.jar
 
+## API EndPoints
+
+### 1a Populate DB with video details
+
+POST http://localhost:8080/interview-homework/populateVideos
+
+### 1b Get All Videos
+
+GET http://localhost:8080/interview-homework/videos
+
+### 2 Get Video by Id
+
+GET http://localhost:8080/interview-homework/videos/[ID]
+
+### 3 Delete Video by Id
+
+DELETE http://localhost:8080/interview-homework/videos/[ID]
+
+### 4 Search videos by search term
+GET http://localhost:8080/interview-homework/searchVideos?searchTermType=[TERM]&value=[VALUE TO SEARCH FOR]
+
+Currently the only supported search terms are 'TITLE' allowed searching on Titles containing the [VALUE TO SEARCH] (case insensitive)
  
