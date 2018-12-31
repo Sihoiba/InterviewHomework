@@ -10,16 +10,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import sihoiba.interviewHomework.exception.ApplicationException;
 import sihoiba.interviewHomework.persistence.ChannelsRepository;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Client for the Youtube v3 API.
@@ -44,14 +52,15 @@ public class YouTubeClient {
     @Autowired
     private YouTube youTube;
 
-    @Value( "interview-homework.youtube.api.token" )
+    @Value( "${interview-homework.youtube.api.token}" )
     private String apiKey;
 
     private static final List<String> searchFilterList;
+
     static {
-        try {
-            File searchFilter = new File( YouTubeClient.class.getResource( "/search_filter" ).getPath() );
-            searchFilterList = Files.readAllLines( searchFilter.toPath() );
+        try ( InputStream resource = new ClassPathResource( "search_filter" ).getInputStream();
+            BufferedReader reader = new BufferedReader( new InputStreamReader( resource ) ) ) {
+            searchFilterList = reader.lines().collect( Collectors.toList() );
         } catch ( IOException e ) {
             LOG.error( "Cannot create Youtube client: {}", e.getMessage() );
             throw new ApplicationException( "Failed to read search_filter", e );
@@ -60,6 +69,7 @@ public class YouTubeClient {
 
     /**
      * Get video details from youTube as per the search filter.
+     *
      * @return A list of the retrieved search result snippets.
      */
     public List<SearchResultSnippet> getVideoDetails() {
@@ -83,10 +93,10 @@ public class YouTubeClient {
                         extractWantedVideoSnippets( videoSnippets, results );
                     }
                     nextPageToken = response.getNextPageToken();
-                } while( nextPageToken != null ); //Google returns null next page token when you have retrieved the last page.
+                } while ( nextPageToken != null ); //Google returns null next page token when you have retrieved the last page.
             }
 
-        } catch( IOException e ) {
+        } catch ( IOException e ) {
             throw new ApplicationException( "Failed to get video details from Youtube", e );
         }
         return videoSnippets;
@@ -94,8 +104,9 @@ public class YouTubeClient {
 
     /**
      * Only include video snippets whose title includes one of the wanted filter words ignoring case
+     *
      * @param videoSnippetsToAddTo the list to add the matching VideoSnippet to
-     * @param results the search results to filter
+     * @param results              the search results to filter
      */
     private void extractWantedVideoSnippets( List<SearchResultSnippet> videoSnippetsToAddTo, List<SearchResult> results ) {
         for ( SearchResult result : results ) {
@@ -112,11 +123,12 @@ public class YouTubeClient {
     /**
      * If we were doing authorised requests, we could use this method to get the channel ids.
      * However we only have an API key which is insufficient
+     *
      * @return List of Channel Ids
      * @throws IOException thrown by the youtube api layer.
      */
     private List<String> getChannelIds() throws IOException {
-        ChannelListResponse channelListResponse = youTube.channels().list("id, snippet" ).setMine( true ).setKey( apiKey ).execute();
+        ChannelListResponse channelListResponse = youTube.channels().list( "id, snippet" ).setMine( true ).setKey( apiKey ).execute();
         List<Channel> channels = channelListResponse.getItems();
         List<String> wantedChannelTitle = getWantedChannelTitles();
         List<String> wantedChannelIds = new ArrayList<>();
@@ -131,7 +143,7 @@ public class YouTubeClient {
     private List<String> getWantedChannelTitles() {
         List<sihoiba.interviewHomework.model.Channel> wantedChannels = channelsRepository.findAll();
         List<String> wantedChannelTitles = new ArrayList<>();
-        for( sihoiba.interviewHomework.model.Channel wantedChannel: wantedChannels ) {
+        for ( sihoiba.interviewHomework.model.Channel wantedChannel : wantedChannels ) {
             wantedChannelTitles.add( wantedChannel.getChannelName() );
         }
         return wantedChannelTitles;

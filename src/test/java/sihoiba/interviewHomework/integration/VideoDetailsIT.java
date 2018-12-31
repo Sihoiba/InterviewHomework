@@ -250,7 +250,7 @@ public class VideoDetailsIT {
 
         // Then
         assertThat( response.getStatus() ).isEqualTo( HttpStatus.METHOD_NOT_ALLOWED.value() );
-        assertThat( response.getHeader( HttpHeaders.ALLOW ) ).isEqualTo( "DELETE, GET" );
+        assertThat( response.getHeader( HttpHeaders.ALLOW ) ).contains( "DELETE" ).contains( "GET" ).doesNotContain( "PUT", "POST" );
         assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'POST' not supported" );
     }
 
@@ -264,7 +264,7 @@ public class VideoDetailsIT {
 
         // Then
         assertThat( response.getStatus() ).isEqualTo( HttpStatus.METHOD_NOT_ALLOWED.value() );
-        assertThat( response.getHeader( HttpHeaders.ALLOW ) ).isEqualTo( "DELETE, GET" );
+        assertThat( response.getHeader( HttpHeaders.ALLOW ) ).contains( "DELETE" ).contains( "GET" ).doesNotContain( "PUT", "POST" );
         assertThat( response.getErrorMessage() ).isEqualTo( "Request method 'PUT' not supported" );
     }
 
